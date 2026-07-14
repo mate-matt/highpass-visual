@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "highpass.vision-recipe-presets.v1",
+  "recipes": [
+    {
+      "id": "balanced-story",
+      "meaning": "Balanced structure, detail, and path budgets for most story illustrations.",
+      "recipe": { "lowFrequencySigma": 4.5, "strongEdges": { "low": 96, "high": 192 }, "detailEdges": { "low": 28, "high": 84 }, "minContourAreaRatio": 0.0005, "simplifyEpsilonRatio": 0.0015, "maxPaths": 2000, "maxVertices": 30000 }
+    },
+    {
+      "id": "quiet-atmosphere",
+      "meaning": "Stronger low-frequency separation and restrained fine detail for memory or mood.",
+      "recipe": { "lowFrequencySigma": 7, "strongEdges": { "low": 110, "high": 220 }, "detailEdges": { "low": 40, "high": 110 }, "minContourAreaRatio": 0.001, "simplifyEpsilonRatio": 0.0025, "maxPaths": 1200, "maxVertices": 22000 }
+    },
+    {
+      "id": "architectural-etch",
+      "meaning": "More structural paths and tighter simplification for architecture and etched linework.",
+      "recipe": { "lowFrequencySigma": 3.5, "strongEdges": { "low": 82, "high": 170 }, "detailEdges": { "low": 24, "high": 72 }, "minContourAreaRatio": 0.00025, "simplifyEpsilonRatio": 0.0009, "maxPaths": 3200, "maxVertices": 48000 }
+    }
+  ]
+}

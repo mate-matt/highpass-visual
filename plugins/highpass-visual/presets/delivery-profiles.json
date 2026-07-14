@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "highpass.delivery-presets.v1",
+  "profiles": [
+    { "id": "landscape-preview", "width": 960, "height": 540, "fps": 24, "codec": "h264", "pixelFormat": "yuv420p" },
+    { "id": "landscape-hd", "width": 1920, "height": 1080, "fps": 30, "codec": "h264", "pixelFormat": "yuv420p" },
+    { "id": "portrait-preview", "width": 540, "height": 960, "fps": 24, "codec": "h264", "pixelFormat": "yuv420p" },
+    { "id": "portrait-hd", "width": 1080, "height": 1920, "fps": 30, "codec": "h264", "pixelFormat": "yuv420p" }
+  ]
+}

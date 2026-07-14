@@ -1,0 +1,20 @@
+{
+  "name": "highpass-visual-local",
+  "interface": {
+    "displayName": "Highpass Visual Local"
+  },
+  "plugins": [
+    {
+      "name": "highpass-visual",
+      "source": {
+        "source": "local",
+        "path": "./plugins/highpass-visual/release/highpass-visual"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Creativity"
+    }
+  ]
+}

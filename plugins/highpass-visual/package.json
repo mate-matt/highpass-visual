@@ -1,0 +1,32 @@
+{
+  "name": "highpass-visual",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "tsup",
+    "python:setup": "node scripts/setup-python.mjs",
+    "python:check": ".venv/bin/python -m py_compile python/vision_compiler.py python/transition_compiler.py",
+    "contracts": "node scripts/generate-contract-assets.mjs",
+    "package:plugin": "npm run build && npm run contracts && node scripts/package-plugin.mjs",
+    "smoke": "node scripts/smoke-mcp.mjs",
+    "validate": "npm run typecheck && npm run python:check && npm run build && npm run contracts && npm test && npm run smoke"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "chromium-bidi": "15.0.0",
+    "playwright-core": "1.61.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.6"
+  }
+}

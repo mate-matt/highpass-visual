@@ -1,0 +1,220 @@
+{
+  "schemaVersion": "highpass.director-project-draft.v1",
+  "projectId": "the-signal-example",
+  "sourceMaterial": {
+    "id": "source-signal",
+    "title": "The Signal",
+    "text": "At dusk, Mira leaves the safe harbor. At dawn, she lights the abandoned signal tower.",
+    "language": "en",
+    "contentHash": "9566d5bac7181dce281c31ac37d09a4d49f6a06f0be21431b1abebb8fdd38200",
+    "provenance": { "kind": "user-input" }
+  },
+  "brief": {
+    "audience": "general",
+    "targetDuration": 20,
+    "aspectRatio": "16:9",
+    "mood": ["reflective", "hopeful"],
+    "tone": ["quiet", "resolute"],
+    "constraints": ["No dialogue cards"],
+    "forbiddenTreatments": []
+  },
+  "storyModel": {
+    "logline": "A keeper turns private courage into a public signal.",
+    "narrativeTruths": [
+      { "id": "truth-duty", "statement": "Chosen responsibility becomes a light others can see." }
+    ],
+    "states": [
+      { "id": "state-dark", "label": "Sheltered", "description": "Mira hesitates inside the safe harbor." },
+      { "id": "state-signal", "label": "Signal", "description": "Mira makes responsibility visible to the coast." }
+    ],
+    "emotionalArc": [
+      { "order": 1, "stateId": "state-dark", "description": "Abandonment defines the opening state." },
+      { "order": 2, "stateId": "state-signal", "description": "Purpose defines the completed state." }
+    ],
+    "motifs": [
+      { "id": "motif-amber", "description": "Amber light makes duty visible.", "entityIds": ["lantern", "lens"] }
+    ],
+    "entities": {
+      "characters": [
+        { "id": "mira", "name": "Mira", "visualIdentity": "adult keeper in an indigo coat" }
+      ],
+      "places": [
+        { "id": "harbor", "name": "Safe harbor", "visualIdentity": "low stone quay beneath violet dusk" },
+        { "id": "tower", "name": "Signal tower", "visualIdentity": "weathered iron tower above a pale sea" }
+      ],
+      "props": [
+        { "id": "lantern", "name": "Brass lantern", "visualIdentity": "worn brass lantern with amber flame" },
+        { "id": "lens", "name": "Signal lens", "visualIdentity": "faceted glass lens with one amber core" }
+      ]
+    },
+    "visualBible": {
+      "id": "bible-signal",
+      "aspectRatio": "16:9",
+      "paletteId": "dawn-amber",
+      "palette": ["#11182e", "#68758f", "#d58c52", "#eee0bd"],
+      "stylePrinciples": ["cinematic painterly realism", "one warm attention anchor"]
+    },
+    "continuityConstraints": [
+      {
+        "id": "continuity-mira",
+        "statement": "Mira keeps the indigo coat and the same brass lantern.",
+        "entityIds": ["mira", "lantern"]
+      }
+    ]
+  },
+  "beats": [
+    {
+      "id": "beat-leave",
+      "order": 1,
+      "summary": "Mira leaves shelter.",
+      "change": { "from": "protected hesitation", "to": "chosen departure" },
+      "entityIds": ["mira", "harbor", "lantern"]
+    },
+    {
+      "id": "beat-light",
+      "order": 2,
+      "summary": "Mira restores the signal.",
+      "change": { "from": "dark abandonment", "to": "visible responsibility" },
+      "entityIds": ["mira", "tower", "lens"]
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-leave",
+      "order": 1,
+      "beatId": "beat-leave",
+      "purpose": "Show the irreversible choice to leave safety.",
+      "attentionTarget": "Mira's amber lantern crossing the quay",
+      "duration": 10,
+      "composition": "wide lateral silhouette",
+      "imageSpecificationId": "image-spec-leave",
+      "treatmentId": "memory-focus",
+      "transitionOut": {
+        "intent": "atmospheric",
+        "duration": 0.5,
+        "lockedMethod": "fade-to-black",
+        "reason": "Dusk falls away before the dawn tower appears."
+      }
+    },
+    {
+      "id": "shot-light",
+      "order": 2,
+      "beatId": "beat-light",
+      "purpose": "Resolve duty as a light the coast can see.",
+      "attentionTarget": "the relit amber signal lens",
+      "duration": 10,
+      "composition": "low-angle tower portrait",
+      "imageSpecificationId": "image-spec-light",
+      "treatmentId": "etched-light",
+      "transitionOut": {
+        "intent": "terminal",
+        "duration": 0,
+        "lockedMethod": "cut",
+        "reason": "The completed signal is the final image."
+      }
+    }
+  ],
+  "imageSpecifications": [
+    {
+      "id": "image-spec-leave",
+      "shotId": "shot-leave",
+      "prompt": "Mira crosses a violet stone harbor carrying one amber lantern.",
+      "visualBibleId": "bible-signal",
+      "characterIds": ["mira"],
+      "placeIds": ["harbor"],
+      "propIds": ["lantern"],
+      "continuityConstraintIds": ["continuity-mira"]
+    },
+    {
+      "id": "image-spec-light",
+      "shotId": "shot-light",
+      "prompt": "A painterly dawn signal tower with one amber lens.",
+      "visualBibleId": "bible-signal",
+      "characterIds": ["mira"],
+      "placeIds": ["tower"],
+      "propIds": ["lens"],
+      "continuityConstraintIds": ["continuity-mira"]
+    }
+  ],
+  "imageCandidates": [
+    {
+      "id": "candidate-leave-import",
+      "imageSpecificationId": "image-spec-leave",
+      "path": "candidate.ppm",
+      "contentHash": "a0be67f391dc19aa4868d1c19d81631e9ffa4a6e3215cc14ef63abefed249038",
+      "width": 2,
+      "height": 2,
+      "origin": { "kind": "import", "sourcePath": "candidate.ppm" }
+    },
+    {
+      "id": "candidate-light-import",
+      "imageSpecificationId": "image-spec-light",
+      "path": "candidate.ppm",
+      "contentHash": "a0be67f391dc19aa4868d1c19d81631e9ffa4a6e3215cc14ef63abefed249038",
+      "width": 2,
+      "height": 2,
+      "origin": {
+        "kind": "import",
+        "sourcePath": "candidate.ppm"
+      }
+    }
+  ],
+  "selections": [
+    {
+      "shotId": "shot-leave",
+      "candidateId": "candidate-leave-import",
+      "selectedImage": {
+        "id": "selected-leave",
+        "path": "candidate.ppm",
+        "contentHash": "a0be67f391dc19aa4868d1c19d81631e9ffa4a6e3215cc14ef63abefed249038"
+      },
+      "decision": "The isolated amber point makes departure readable."
+    },
+    {
+      "shotId": "shot-light",
+      "candidateId": "candidate-light-import",
+      "selectedImage": {
+        "id": "selected-light",
+        "path": "candidate.ppm",
+        "contentHash": "a0be67f391dc19aa4868d1c19d81631e9ffa4a6e3215cc14ef63abefed249038"
+      },
+      "decision": "The amber lens is a single unmistakable attention target."
+    }
+  ],
+  "shotProgramPlans": [
+    {
+      "shotId": "shot-leave",
+      "selectedImageId": "selected-leave",
+      "selectedImageHash": "a0be67f391dc19aa4868d1c19d81631e9ffa4a6e3215cc14ef63abefed249038",
+      "treatmentId": "memory-focus",
+      "visionRecipe": {
+        "lowFrequencySigma": 4.5,
+        "strongEdges": { "low": 96, "high": 192 },
+        "detailEdges": { "low": 28, "high": 84 },
+        "minContourAreaRatio": 0.0005,
+        "simplifyEpsilonRatio": 0.0015,
+        "maxPaths": 2000,
+        "maxVertices": 30000
+      },
+      "seed": "the-signal-example:1",
+      "status": "awaiting-vision-asset"
+    },
+    {
+      "shotId": "shot-light",
+      "selectedImageId": "selected-light",
+      "selectedImageHash": "a0be67f391dc19aa4868d1c19d81631e9ffa4a6e3215cc14ef63abefed249038",
+      "treatmentId": "etched-light",
+      "visionRecipe": {
+        "lowFrequencySigma": 4.5,
+        "strongEdges": { "low": 96, "high": 192 },
+        "detailEdges": { "low": 28, "high": 84 },
+        "minContourAreaRatio": 0.0005,
+        "simplifyEpsilonRatio": 0.0015,
+        "maxPaths": 2000,
+        "maxVertices": 30000
+      },
+      "seed": "the-signal-example:2",
+      "status": "awaiting-vision-asset"
+    }
+  ]
+}

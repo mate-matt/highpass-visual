@@ -1,0 +1,1328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": "highpass.mcp-contract-catalog.v1",
+  "tools": {
+    "compile_director_project": {
+      "description": "Validate a Skill-authored Director Project draft, verify accepted Image Candidate bytes, and write a content-addressed Story Model, Beats, Shots, image contracts, selections, and Shot Program plans.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "draftPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outputRoot": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "draftPath",
+          "outputRoot"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "projectPath": {
+                "type": "string"
+              },
+              "directorHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "cache": {
+                "type": "string",
+                "enum": [
+                  "hit",
+                  "miss"
+                ]
+              }
+            },
+            "required": [
+              "projectPath",
+              "directorHash",
+              "cache"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "compile_transition_asset": {
+      "description": "Analyze two adjacent Vision Assets with ORB/RANSAC, bidirectional optical flow, occlusion confidence, Distance Fields, and contour correspondence; select a quality-gated transition method and return its content-addressed manifest path.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "outgoingVisionManifestPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "incomingVisionManifestPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "transitionIntent": {
+            "type": "object",
+            "properties": {
+              "intent": {
+                "type": "string",
+                "enum": [
+                  "continuity",
+                  "reveal",
+                  "atmospheric",
+                  "dislocation",
+                  "terminal"
+                ]
+              },
+              "duration": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 8
+              },
+              "lockedMethod": {
+                "type": "string",
+                "enum": [
+                  "cut",
+                  "fade-to-black",
+                  "cross-dissolve",
+                  "distance-field-wipe",
+                  "homography-dissolve",
+                  "optical-flow-dissolve",
+                  "contour-morph"
+                ]
+              }
+            },
+            "required": [
+              "intent",
+              "duration",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "artifactRoot": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "outgoingVisionManifestPath",
+          "incomingVisionManifestPath",
+          "transitionIntent",
+          "artifactRoot"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "manifestPath": {
+                "type": "string"
+              },
+              "artifactHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "selectedMethod": {
+                "type": "string",
+                "enum": [
+                  "cut",
+                  "fade-to-black",
+                  "cross-dissolve",
+                  "distance-field-wipe",
+                  "homography-dissolve",
+                  "optical-flow-dissolve",
+                  "contour-morph"
+                ]
+              },
+              "cache": {
+                "type": "string",
+                "enum": [
+                  "hit",
+                  "miss"
+                ]
+              }
+            },
+            "required": [
+              "manifestPath",
+              "artifactHash",
+              "selectedMethod",
+              "cache"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "compile_vision_asset": {
+      "description": "Compile one Selected Image and typed recipe into a cached, content-addressed Vision Asset. Returns only the manifest path and cache summary; raster and geometry payloads remain on disk.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "selectedImage": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contentHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "maskPath": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "path",
+              "contentHash"
+            ]
+          },
+          "recipe": {
+            "type": "object",
+            "properties": {
+              "lowFrequencySigma": {
+                "type": "number",
+                "minimum": 0.5,
+                "maximum": 40
+              },
+              "strongEdges": {
+                "type": "object",
+                "properties": {
+                  "low": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                  },
+                  "high": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 255
+                  }
+                },
+                "required": [
+                  "low",
+                  "high"
+                ]
+              },
+              "detailEdges": {
+                "type": "object",
+                "properties": {
+                  "low": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 255
+                  },
+                  "high": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 255
+                  }
+                },
+                "required": [
+                  "low",
+                  "high"
+                ]
+              },
+              "minContourAreaRatio": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 0.25
+              },
+              "simplifyEpsilonRatio": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 0.05
+              },
+              "maxPaths": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 20000
+              },
+              "maxVertices": {
+                "type": "integer",
+                "minimum": 16,
+                "maximum": 300000
+              }
+            },
+            "required": [
+              "lowFrequencySigma",
+              "strongEdges",
+              "detailEdges",
+              "minContourAreaRatio",
+              "simplifyEpsilonRatio",
+              "maxPaths",
+              "maxVertices"
+            ]
+          },
+          "artifactRoot": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "selectedImage",
+          "recipe",
+          "artifactRoot"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "manifestPath": {
+                "type": "string"
+              },
+              "artifactHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "cache": {
+                "type": "string",
+                "enum": [
+                  "hit",
+                  "miss"
+                ]
+              }
+            },
+            "required": [
+              "manifestPath",
+              "artifactHash",
+              "cache"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "inspect_runtime": {
+      "description": "Report whether Node.js, Python, OpenCV, OpenCV ximgproc, FFmpeg, and deterministic browser capture are available. This tool never installs or changes the runtime.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "ready",
+                  "degraded",
+                  "blocked"
+                ]
+              },
+              "capabilities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "enum": [
+                        "node",
+                        "python",
+                        "opencv",
+                        "opencv-ximgproc",
+                        "ffmpeg",
+                        "ffprobe",
+                        "browser-capture",
+                        "transition-renderer"
+                      ]
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "available": {
+                      "type": "boolean"
+                    },
+                    "version": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "features": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "required",
+                    "available",
+                    "version",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "blockers": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "capabilities",
+              "blockers",
+              "warnings"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "prepare_ink_reveal_preview": {
+      "description": "Bind a Shot and Vision Asset into a validated absolute-time Ink Reveal Shot Program and a self-contained interactive Canvas preview. Returns file paths only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "shotId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attentionTarget": {
+            "type": "string",
+            "minLength": 1
+          },
+          "duration": {
+            "default": 10,
+            "type": "number",
+            "minimum": 5,
+            "maximum": 120
+          },
+          "directionHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "transitionOut": {
+            "type": "object",
+            "properties": {
+              "intent": {
+                "type": "string",
+                "enum": [
+                  "continuity",
+                  "reveal",
+                  "atmospheric",
+                  "dislocation",
+                  "terminal"
+                ]
+              },
+              "duration": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 8
+              },
+              "lockedMethod": {
+                "type": "string",
+                "enum": [
+                  "cut",
+                  "fade-to-black",
+                  "cross-dissolve",
+                  "distance-field-wipe",
+                  "homography-dissolve",
+                  "optical-flow-dissolve",
+                  "contour-morph"
+                ]
+              }
+            },
+            "required": [
+              "intent",
+              "duration",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "visionAssetManifestPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outputDirectory": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "shotId",
+          "attentionTarget",
+          "visionAssetManifestPath",
+          "outputDirectory"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "indexPath": {
+                "type": "string"
+              },
+              "shotProgramPath": {
+                "type": "string"
+              },
+              "programHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "indexPath",
+              "shotProgramPath",
+              "programHash"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "prepare_transition_program": {
+      "description": "Bind two selected Shot Programs and one quality-gated Transition Asset into a shared-time deterministic transition preview supporting cross dissolve, Distance Field wipe, Homography, optical flow, and contour morph.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "outgoingShotProgramPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outgoingPreviewIndexPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "incomingShotProgramPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "incomingPreviewIndexPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "transitionAssetManifestPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outputDirectory": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "outgoingShotProgramPath",
+          "outgoingPreviewIndexPath",
+          "incomingShotProgramPath",
+          "incomingPreviewIndexPath",
+          "transitionAssetManifestPath",
+          "outputDirectory"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "indexPath": {
+                "type": "string"
+              },
+              "transitionProgramPath": {
+                "type": "string"
+              },
+              "previewManifestPath": {
+                "type": "string"
+              },
+              "programHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "htmlHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "selectedMethod": {
+                "type": "string",
+                "enum": [
+                  "cross-dissolve",
+                  "distance-field-wipe",
+                  "homography-dissolve",
+                  "optical-flow-dissolve",
+                  "contour-morph"
+                ]
+              }
+            },
+            "required": [
+              "indexPath",
+              "transitionProgramPath",
+              "programHash",
+              "selectedMethod"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "prepare_treatment_comparison": {
+      "description": "Build Ink Reveal, Memory Focus, and Etched Light candidates with one narrative identity, seed, viewport, duration, probe schedule, Shot Sampler, and Canvas renderer.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "shotId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attentionTarget": {
+            "type": "string",
+            "minLength": 1
+          },
+          "duration": {
+            "default": 10,
+            "type": "number",
+            "minimum": 5,
+            "maximum": 120
+          },
+          "seed": {
+            "type": "string",
+            "minLength": 1
+          },
+          "directionHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "transitionOut": {
+            "type": "object",
+            "properties": {
+              "intent": {
+                "type": "string",
+                "enum": [
+                  "continuity",
+                  "reveal",
+                  "atmospheric",
+                  "dislocation",
+                  "terminal"
+                ]
+              },
+              "duration": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 8
+              },
+              "lockedMethod": {
+                "type": "string",
+                "enum": [
+                  "cut",
+                  "fade-to-black",
+                  "cross-dissolve",
+                  "distance-field-wipe",
+                  "homography-dissolve",
+                  "optical-flow-dissolve",
+                  "contour-morph"
+                ]
+              }
+            },
+            "required": [
+              "intent",
+              "duration",
+              "reason"
+            ],
+            "additionalProperties": false
+          },
+          "visionAssetManifestPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outputDirectory": {
+            "type": "string",
+            "minLength": 1
+          },
+          "controls": {
+            "type": "object",
+            "properties": {
+              "ink-reveal": {
+                "type": "object",
+                "properties": {
+                  "lineWidth": {
+                    "default": 1.35,
+                    "type": "number",
+                    "minimum": 0.25,
+                    "maximum": 12,
+                    "description": "Width of contour and skeleton strokes; affects Region Contours and Open Strokes."
+                  },
+                  "distanceSoftness": {
+                    "default": 0.035,
+                    "type": "number",
+                    "minimum": 0.001,
+                    "maximum": 0.25,
+                    "description": "Feather width of the inward reveal; affects Distance Field and Subject Mask."
+                  },
+                  "atmosphereGain": {
+                    "default": 0.66,
+                    "type": "number",
+                    "minimum": 0.1,
+                    "maximum": 1,
+                    "description": "Maximum low-frequency atmosphere opacity."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "memory-focus": {
+                "type": "object",
+                "properties": {
+                  "atmosphereGain": {
+                    "default": 0.78,
+                    "type": "number",
+                    "minimum": 0.1,
+                    "maximum": 1,
+                    "description": "Strength of the first low-frequency memory impression."
+                  },
+                  "initialBlurPx": {
+                    "default": 22,
+                    "type": "number",
+                    "minimum": 4,
+                    "maximum": 40,
+                    "description": "Starting blur applied to both low-frequency and source layers."
+                  },
+                  "structuralEmphasis": {
+                    "default": 0.62,
+                    "type": "number",
+                    "minimum": 0.1,
+                    "maximum": 1,
+                    "description": "Strong-edge prominence during focus recovery."
+                  },
+                  "fineDetailClarity": {
+                    "default": 0.36,
+                    "type": "number",
+                    "minimum": 0.05,
+                    "maximum": 1,
+                    "description": "Fine-detail presence after structure resolves."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "etched-light": {
+                "type": "object",
+                "properties": {
+                  "lineWidth": {
+                    "default": 1.1,
+                    "type": "number",
+                    "minimum": 0.25,
+                    "maximum": 6,
+                    "description": "Width of etched contour and skeleton linework."
+                  },
+                  "lightGain": {
+                    "default": 0.52,
+                    "type": "number",
+                    "minimum": 0.05,
+                    "maximum": 1,
+                    "description": "Gain for positive signed high-frequency responses."
+                  },
+                  "darkGain": {
+                    "default": 0.46,
+                    "type": "number",
+                    "minimum": 0.05,
+                    "maximum": 1,
+                    "description": "Gain for negative signed high-frequency responses."
+                  },
+                  "textureCeiling": {
+                    "default": 0.14,
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 0.17,
+                    "description": "Hard upper bound for weak texture, always at most half the structural gain."
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "shotId",
+          "attentionTarget",
+          "seed",
+          "visionAssetManifestPath",
+          "outputDirectory"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "indexPath": {
+                "type": "string"
+              },
+              "comparisonManifestPath": {
+                "type": "string"
+              },
+              "comparisonHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "candidateProgramPaths": {
+                "minItems": 3,
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "indexPath",
+              "comparisonManifestPath",
+              "comparisonHash",
+              "candidateProgramPaths"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "publish_shot": {
+      "description": "Capture frame n at absolute Scene Time n/fps, resume valid lossless frames, encode an opaque H.264 MP4, inspect it, and return Delivery and Quality Evidence paths.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "shotProgramPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "previewIndexPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "deliveryProfile": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 16,
+                "maximum": 7680
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 16,
+                "maximum": 7680
+              },
+              "fps": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 120
+              },
+              "codec": {
+                "type": "string",
+                "const": "h264"
+              },
+              "pixelFormat": {
+                "type": "string",
+                "const": "yuv420p"
+              }
+            },
+            "required": [
+              "id",
+              "width",
+              "height",
+              "fps",
+              "codec",
+              "pixelFormat"
+            ]
+          },
+          "outputRoot": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "shotProgramPath",
+          "previewIndexPath",
+          "deliveryProfile",
+          "outputRoot"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "published",
+                  "lossless-fallback"
+                ]
+              },
+              "deliveryHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "mp4Path": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "frameManifestPath": {
+                "type": "string"
+              },
+              "qualityEvidencePath": {
+                "type": "string"
+              },
+              "expectedFrameCount": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "renderedFrames": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "reusedFrames": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "status",
+              "deliveryHash",
+              "mp4Path",
+              "frameManifestPath",
+              "qualityEvidencePath",
+              "expectedFrameCount",
+              "renderedFrames",
+              "reusedFrames"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    "publish_story": {
+      "description": "Validate Director-to-Shot bindings, publish and locally repair each exact-frame Shot, preserve canonical Beat order and transitions, mux optional existing audio and subtitles, inspect the final MP4, and write project-level Quality Evidence.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directorProjectPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "shots": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "shotId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "shotProgramPath": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "previewIndexPath": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "shotId",
+                "shotProgramPath",
+                "previewIndexPath"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "transitions": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "outgoingShotId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "incomingShotId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "transitionProgramPath": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "previewIndexPath": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "outgoingShotId",
+                "incomingShotId",
+                "transitionProgramPath",
+                "previewIndexPath"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "deliveryProfile": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "width": {
+                "type": "integer",
+                "minimum": 16,
+                "maximum": 7680
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 16,
+                "maximum": 7680
+              },
+              "fps": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 120
+              },
+              "codec": {
+                "type": "string",
+                "const": "h264"
+              },
+              "pixelFormat": {
+                "type": "string",
+                "const": "yuv420p"
+              }
+            },
+            "required": [
+              "id",
+              "width",
+              "height",
+              "fps",
+              "codec",
+              "pixelFormat"
+            ]
+          },
+          "audioPath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subtitlePath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outputRoot": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "directorProjectPath",
+          "shots",
+          "deliveryProfile",
+          "outputRoot"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "const": "published"
+              },
+              "storyHash": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "mp4Path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "qualityEvidencePath": {
+                "type": "string",
+                "minLength": 1
+              },
+              "expectedFrameCount": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "shots": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "shotId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "deliveryHash": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    "frameManifestPath": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "qualityEvidencePath": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "renderedFrames": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "reusedFrames": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "shotId",
+                    "deliveryHash",
+                    "frameManifestPath",
+                    "qualityEvidencePath",
+                    "renderedFrames",
+                    "reusedFrames"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "transitions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "outgoingShotId": {
+                      "type": "string"
+                    },
+                    "incomingShotId": {
+                      "type": "string"
+                    },
+                    "deliveryHash": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    "frameManifestPath": {
+                      "type": "string"
+                    },
+                    "renderedFrames": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "reusedFrames": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "outgoingShotId",
+                    "incomingShotId",
+                    "deliveryHash",
+                    "frameManifestPath",
+                    "renderedFrames",
+                    "reusedFrames"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "status",
+              "storyHash",
+              "mp4Path",
+              "qualityEvidencePath",
+              "expectedFrameCount",
+              "shots",
+              "transitions"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  }
+}

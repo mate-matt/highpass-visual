@@ -1,0 +1,4 @@
+interface:
+  display_name: "Direct Story Films"
+  short_description: "Direct stories into deterministic animated films"
+  default_prompt: "Use $direct-story-films to turn this story into an art-directed animated film."

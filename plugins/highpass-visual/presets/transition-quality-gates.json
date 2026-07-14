@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "highpass.transition-quality-gates.v1",
+  "homography": {
+    "minimumMatches": 20,
+    "minimumInliers": 12,
+    "minimumInlierRatio": 0.35,
+    "maximumReprojectionError": 3,
+    "minimumOverlapCoverage": 0.45,
+    "maximumProjectedAreaRatio": 1.45
+  },
+  "opticalFlow": {
+    "minimumConfidence": 0.65,
+    "maximumOcclusionRatio": 0.35,
+    "maximumForwardBackwardError": 1.5,
+    "maximumDisplacementRatio": 0.25
+  },
+  "contours": {
+    "minimumPairs": 1,
+    "minimumCoverage": 0.25,
+    "minimumConfidence": 0.55
+  }
+}

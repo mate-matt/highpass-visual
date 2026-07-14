@@ -1,0 +1,25 @@
+{
+  "name": "highpass-visual",
+  "version": "0.2.0+codex.20260714044134",
+  "description": "Direct story-driven animated films with offline OpenCV vision compilation and deterministic browser rendering.",
+  "author": {
+    "name": "Highpass Visual"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Highpass Visual",
+    "shortDescription": "Turn stories into deterministic animated films.",
+    "longDescription": "Highpass Visual directs source material into treatments, shots, OpenCV-compiled visual assets, deterministic browser animation, and exact video deliveries.",
+    "developerName": "Highpass Visual",
+    "category": "Creative",
+    "capabilities": [
+      "story direction",
+      "OpenCV vision compilation",
+      "deterministic animation",
+      "video export"
+    ],
+    "defaultPrompt": "Turn my story or article into a directed animated film, starting with runtime inspection and treatment choices."
+  },
+  "mcpServers": "./.mcp.json"
+}

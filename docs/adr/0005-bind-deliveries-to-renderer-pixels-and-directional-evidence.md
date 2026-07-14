@@ -1,0 +1,5 @@
+# Bind deliveries to renderer pixels and directional evidence
+
+Highpass Visual treats generated Shot and Transition preview HTML as a verified artifact rather than an interchangeable viewer. A preview identity includes its Program, embedded child-preview HTML, renderer runtime, image bytes, and resulting HTML hash; publication includes that verified HTML hash and the browser fingerprint in its delivery address. Transition Assets record byte hashes for forward/backward flow, directional confidence, and directional occlusion rasters, and Story verification re-samples every Transition frame from its Program. This prevents stale or substituted renderers from producing different pixels under valid-looking hashes.
+
+Optical-flow reliability is directional because an outgoing pixel and an incoming pixel can have different visibility and consistency. The renderer therefore samples the matching confidence and occlusion map for each warp and locally falls back to the unwarped Cross Dissolve where reliability is low.
