@@ -6,9 +6,16 @@ Highpass Visual is a local-first Codex plugin that turns a story, article, or es
 
 ## Demo first: *The Last Lantern*
 
+![The Last Lantern — 16-second inline animated preview](docs/assets/the-last-lantern/the-last-lantern-preview.gif)
+
+The complete 16-second film plays inline above. [Open the original 1280×720 MP4](docs/assets/the-last-lantern/the-last-lantern.mp4) for the full-quality H.264 render.
+
+<details>
+<summary>View the three-shot contact sheet</summary>
+
 ![The Last Lantern contact sheet](docs/assets/the-last-lantern/contact-sheet.png)
 
-[▶ Watch the 16-second MP4](docs/assets/the-last-lantern/the-last-lantern.mp4)
+</details>
 
 This three-shot fictional story was directed, visually compiled, animated, and published through the complete Highpass pipeline:
 
