@@ -6,9 +6,16 @@ Highpass Visual 是一个本地优先的 Codex 插件：把故事、文章或散
 
 ## 先看案例：《最后一盏灯》
 
+![《最后一盏灯》——16 秒内联动画预览](docs/assets/the-last-lantern/the-last-lantern-preview.gif)
+
+上方会直接播放完整的 16 秒成片。[打开 1280×720 原始 MP4](docs/assets/the-last-lantern/the-last-lantern.mp4) 可观看完整质量的 H.264 版本。
+
+<details>
+<summary>查看三镜头接触表</summary>
+
 ![《最后一盏灯》接触表](docs/assets/the-last-lantern/contact-sheet.png)
 
-[▶ 观看 16 秒 MP4](docs/assets/the-last-lantern/the-last-lantern.mp4)
+</details>
 
 这个三镜头虚构故事完整跑过了 Highpass 的导演、视觉编译、动画与发布管线：
 
