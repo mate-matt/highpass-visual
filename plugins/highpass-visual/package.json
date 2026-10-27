@@ -27,6 +27,6 @@
     "playwright-core": "1.61.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.11"
   }
 }
